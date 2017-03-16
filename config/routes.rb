@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users
       resources :sessions, only: [:create, :destroy]
+      resources :account_activations, only:[:edit]
     end
   end
 

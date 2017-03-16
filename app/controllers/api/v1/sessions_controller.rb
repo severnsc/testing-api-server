@@ -4,7 +4,7 @@ class Api::V1::SessionsController < ApplicationController
 
   def create
     user = User.find_by_email(params['email'])
-    if user && user.authenticate(params['password'])
+    if user && user.activated? && user.authenticate(params['password'])
       user.generate_auth_token!
       user.save
       respond_with user

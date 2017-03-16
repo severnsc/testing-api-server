@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :valid_auth_token, only: [:show, :update, :destroy]
+  before_action :valid_auth_token, only: [:show, :index, :update, :destroy]
   before_action :correct_user, only: [:update, :destroy]
   protect_from_forgery with: :null_session
   respond_to :json
@@ -18,8 +18,8 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def create
-    User.create(user_params)
-    redirect_to params[:url]
+    user = User.create(user_params)
+    render json: {'user' => user, 'activation_token' => user.activation_token}
   end
 
   def destroy
