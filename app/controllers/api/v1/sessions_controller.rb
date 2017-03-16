@@ -6,7 +6,7 @@ class Api::V1::SessionsController < ApplicationController
     if user && user.authenticate(params[:password])
       redirect_to params[:url]
     else
-      redirect_back('http://google.com')
+      redirect_back
     end
   end
 
