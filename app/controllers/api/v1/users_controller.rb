@@ -15,8 +15,8 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def create
-    respond_with User.create(user_params)
-    redirect_back('http://localhost:3000')
+    User.create(user_params)
+    redirect_to params[:url]
   end
 
   def destroy
