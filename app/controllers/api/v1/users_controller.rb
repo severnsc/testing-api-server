@@ -14,7 +14,8 @@ class Api::V1::UsersController < ApplicationController
 
   def update
     user = current_user
-    respond_with user.update(user_params)
+    user.update(user_params)
+    render json: current_user
   end
 
   def create
@@ -34,8 +35,8 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def correct_user
-    user = User.find_by_auth_token(response.headers['Authorize'])
-    render json: {errors: "unauthorized"}, status: 401
+    user = User.find_by_auth_token(request.headers['Authorize'])
+    render json: {errors: "unauthorized"}, status: 401 unless user == current_user
   end
 
   def user_params
