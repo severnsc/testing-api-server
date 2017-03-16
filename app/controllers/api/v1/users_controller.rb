@@ -1,4 +1,5 @@
 class Api::V1::UsersController < ApplicationController
+  before_action :valid_auth_token, only: [:show, :update, :destroy]
   before_action :correct_user, only: [:update, :destroy]
   protect_from_forgery with: :null_session
   respond_to :json
@@ -28,9 +29,13 @@ class Api::V1::UsersController < ApplicationController
 
   private
 
+  def valid_auth_token
+    render json: {errors: "unauthorized"}, status: 401 unless current_user
+  end
+
   def correct_user
     user = User.find_by_auth_token(response.headers['Authorize'])
-    render json: {"Unauthorized"}, status: 401 unless user == current_user
+    render json: {errors: "unauthorized"}, status: 401
   end
 
   def user_params
