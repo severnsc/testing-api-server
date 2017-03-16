@@ -1,12 +1,13 @@
 class Api::V1::SessionsController < ApplicationController
+  protect_from_forgery with: :null_session
   respond_to :json
 
   def create
-    user = User.find_by_email(params[:user][:email])
-    if user && user.authenticate(params[:user][:password])
-      redirect_to params[:url]
+    user = User.find_by_email(params['email'])
+    if user && user.authenticate(params['password'])
+      respond_with user
     else
-      redirect_back fallback_location: params[:url]
+      redirect_to 'http://google.com'
     end
   end
 

@@ -3,7 +3,7 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
 
   def setup
-    @user = User.new(email: "user@example.com", password: "password", password_confirmation: "password")
+    @user = User.new(email: "user@example.com", password: "password", password_confirmation: "password", auth_token: "")
   end
 
   test "should be valid" do
@@ -37,5 +37,10 @@ class UserTest < ActiveSupport::TestCase
     @user.password = "a"*7
     @user.password_confirmation = "a"*7
     assert_not @user.valid?
+  end
+
+  test "should generate auth_token before create" do
+    @user.save
+    assert_not @user.reload.auth_token.nil?
   end
 end
