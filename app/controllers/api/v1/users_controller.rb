@@ -9,18 +9,30 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def show
-    respond_with User.find(params[:id])
+    user = User.find(params[:id])
+    if user
+      render json: user
+    else
+      head 404
+    end
   end
 
   def update
     user = current_user
-    user.update(user_params)
-    render json: current_user
+    if user.update(user_params)
+      render json: current_user
+    else
+      render json: user.errors.full_messages
+    end
   end
 
   def create
-    user = User.create(user_params)
-    render json: {'user' => user, 'activation_token' => user.activation_token}
+    user = User.new(user_params)
+    if user.save
+      render json: {'user' => user, 'activation_token' => user.activation_token}
+    else
+      render json: {'errors' => user.errors.full_messages}
+    end
   end
 
   def destroy
